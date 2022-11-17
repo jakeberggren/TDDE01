@@ -31,14 +31,14 @@ ggplot(data, aes(x = age, y = pgc, color = as.factor(diabetes))) +
 
 logistic_model <- glm(diabetes ~ pgc + age, data = data, family = "binomial")
 
-summary(logistic.model)
+summary(logistic_model)
 
-prediction <- predict(logistic.model, data, type = "response")
+prediction <- predict(logistic_model, data, type = "response")
 prediction_1 <- ifelse(prediction > 0.5, 1, 0)
 
 # Confusion matrix
 cm <- table(prediction_1, diabetes)
-misclass <- (1 - sum(diag(CM)) / length(prediction_1)) # 0.2552083 or 0.2630208?
+misclass <- (1 - sum(diag(cm)) / length(prediction_1)) # 0.2552083 or 0.2630208?
 
 # Plot
 ggplot(data, aes(x = age, y = pgc, color = as.factor(prediction_1))) +
@@ -57,10 +57,10 @@ ggplot(data, aes(x = age, y = pgc, color = as.factor(prediction_1))) +
 ggplot(data, aes(x = age, y = pgc, color = as.factor(prediction_1))) +
   geom_point() +
   scale_color_manual(values = c("black", "deepskyblue2")) +
-  geom_abline(slope = coef(logistic.model)[["age"]]
-              / (-coef(logistic.model)[["pgc"]]),
-              intercept = coef(logistic.model)[["(Intercept)"]]
-              / (-coef(logistic.model)[["pgc"]]), color = "darkslategrey") +
+  geom_abline(slope = coef(logistic_model)[["age"]]
+              / (-coef(logistic_model)[["pgc"]]),
+              intercept = coef(logistic_model)[["(Intercept)"]]
+              / (-coef(logistic_model)[["pgc"]]), color = "darkslategrey") +
   labs(x = "Age", y = "Plasma Glucose Concentration",
        color = "Predicted Diabetes")
 
@@ -105,7 +105,7 @@ model <- glm(y ~ pgc + age + z1 + z2 + z3 + z4 + z5,
 summary(model)
 
 prediction_basis <- predict(model, data, type = "response")
-prediction_basis <- ifelse(prediction.basis > 0.5, 1, 0)
+prediction_basis <- ifelse(prediction_basis > 0.5, 1, 0)
 
 # Confusion Matrix
 cm_basis <- table(prediction_basis, y)

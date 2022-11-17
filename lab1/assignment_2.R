@@ -87,22 +87,25 @@ theta_opt_1000 <- RidgeOpt(lambda = 1000)
 
 x_train <- as.matrix(train_scaled %>% select(Jitter...:PPE))
 x_test <- as.matrix(test_scaled %>% select(Jitter...:PPE))
+opt_1 <- as.matrix(theta_opt_1$par[-17])
+opt_100 <- as.matrix(theta_opt_100$par[-17])
+opt_1000 <- as.matrix(theta_opt_1000$par[-17])
 
 # Prediction of motor_UPDRS values for training and test data
-pred_train_opt_1 <- x_train %*% as.matrix(theta_opt_1$par[-17])
-pred_test_opt_1 <- x_test %*% as.matrix(theta_opt_1$par[-17])
-pred_train_opt_100 <- x_train %*% as.matrix(theta_opt_100$par[-17])
-pred_test_opt_100 <- x_test %*% as.matrix(theta_opt_100$par[-17])
-pred_train_opt_1000 <- x_train %*% as.matrix(theta_opt_1000$par[-17])
-pred_test_opt_1000 <- x_test %*% as.matrix(theta_opt_1000$par[-17])
+pred_train_opt_1 <- x_train %*% opt_1
+pred_test_opt_1  <- x_test %*% opt_1
+pred_train_opt_100 <- x_train %*% opt_100
+pred_test_opt_100  <- x_test %*% opt_100
+pred_train_opt_1000 <- x_train %*% opt_1000
+pred_test_opt_1000  <- x_test %*% opt_1000
 
 # Training and test Mean Square Error
 mse_train_opt_1 <- mean((train_scaled$motor_UPDRS - pred_train_opt_1)^2)
-mse_test_opt_1 <- mean((test_scaled$motor_UPDRS - pred_test_opt_1)^2)
+mse_test_opt_1  <- mean((test_scaled$motor_UPDRS  - pred_test_opt_1)^2)
 mse_train_opt_100 <- mean((train_scaled$motor_UPDRS - pred_train_opt_100)^2)
-mse_test_opt_100 <- mean((test_scaled$motor_UPDRS - pred_test_opt_100)^2)
+mse_test_opt_100  <- mean((test_scaled$motor_UPDRS  - pred_test_opt_100)^2)
 mse_train_opt_1000 <- mean((train_scaled$motor_UPDRS - pred_train_opt_1000)^2)
-mse_test_opt_1000 <- mean((test_scaled$motor_UPDRS - pred_test_opt_1000)^2)
+mse_test_opt_1000  <- mean((test_scaled$motor_UPDRS  - pred_test_opt_1000)^2)
 
 # Degrees of freedom
 df_1 <- DF(lambda = 1) # 255.9955
