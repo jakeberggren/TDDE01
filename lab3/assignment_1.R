@@ -24,7 +24,7 @@ h.time <- 6
 a <- 58.4274  # longitude
 b <- 14.8263  # latitude
 
-p.date <- "2023-01-01" # The date to predict
+p.date <- "2023-11-04" # The date to predict
 
 times <- c("04:00:00", "06:00:00", "08:00:00", "10:00:00",
            "12:00:00", "14:00:00", "16:00:00", "18:00:00",

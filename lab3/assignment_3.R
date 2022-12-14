@@ -1,0 +1,105 @@
+# Assignment 3 of Lab 3 of course TDDE01,
+# Machine Learning at Linkoping University, Sweden
+
+
+########### Libraries #############
+library(neuralnet)
+library(dplyr)
+########### Libraries #############
+
+
+set.seed(1234567890)
+
+var <- runif(500, 0, 10)
+mydata <- data.frame(var, sin = sin(var))
+tr <- mydata[1:25, ] # Training
+te <- mydata[26:500, ] # Test
+
+# Random initialization of the weights in the interval [-1, 1]
+winit <- runif(10, -1, 1)
+
+
+# Task 1, using default activation function (sigmoid)
+nn <- neuralnet(sin ~ ., tr, hidden = 10,
+                startweights = winit, act.fct = "logistic")
+
+# Plot of the training data (black), test data (blue), and predictions (red)
+plot(tr, cex = 2, xlab = "", ylab = "", main = "Neural network - Sine Function")
+points(te, col = "blue", cex = 0.8)
+points(te[, 1], predict(nn, te), col = "red", cex = 0.8)
+legend("bottomright", c("train data", "test data", "predictions"),
+       col = c("black", "blue", "red"), pch = 1, box.lty = 0,
+       cex = 0.8, inset = c(0.01, 0.01))
+
+
+# Task 2, Test with linear, ReLU and softplus as activation functions
+
+# Linear activation function
+linear <- function(x) x
+nn.linear <- neuralnet(sin ~ ., tr, hidden = 10,
+                startweights = winit, act.fct = linear)
+
+plot(tr, cex = 2, xlab = "", ylab = "", main = "Linear activation function")
+points(te, col = "blue", cex = 0.8)
+points(te[, 1], predict(nn.linear, te), col = "green", cex = 0.8)
+legend("bottomright", c("train data", "test data", "predictions"),
+       col = c("black", "blue", "green"), pch = 1, box.lty = 0,
+       cex = 0.8, inset = c(0.01, 0.01))
+
+# ReLU activation function
+ReLU <- function(x) ifelse(x > 0, x, 0)
+nn.relu <- neuralnet(sin ~ ., tr, hidden = 10,
+                startweights = winit, act.fct = ReLU)
+
+plot(tr, cex = 2, xlab = "", ylab = "", main = "ReLU activation function")
+points(te, col = "blue", cex = 0.8)
+points(te[, 1], predict(nn.relu, te), col = "green", cex = 0.8)
+legend("bottomright", c("train data", "test data", "predictions"),
+       col = c("black", "blue", "green"), pch = 1, box.lty = 0,
+       cex = 0.8, inset = c(0.01, 0.01))
+
+# Softplus activation function
+softplus <- function(x) log(1 + exp(x))
+nn.softplus <- neuralnet(sin ~ ., tr, hidden = 10,
+                startweights = winit, act.fct = softplus)
+
+plot(tr, cex = 2, xlab = "", ylab = "", main = "Softplus activation function")
+points(te, col = "blue", cex = 0.8)
+points(te[, 1], predict(nn.softplus, te), col = "green", cex = 0.8)
+legend("bottomright", c("train data", "test data", "predictions"),
+       col = c("black", "blue", "green"), pch = 1, box.lty = 0,
+       cex = 0.8, inset = c(0.01, 0.01))
+
+# Task 3 - Sample 500 random points in the interval [0, 50] and apply
+# the sine function to each point. Use the NN learned in task 1.
+
+var <- runif(500, 0, 50)
+mydata <- data.frame(var, sin = sin(var))
+
+plot(mydata, cex = 2, xlab = "", ylab = "", ylim = c(-10, 2),
+     main = "Neural Network on new data")
+points(mydata[, 1], predict(nn, mydata[1]), col = "blue", cex = 0.8)
+legend("bottomleft", c("new sample data", "predictions"),
+       col = c("black", "blue"), pch = 1, box.lty = 0,
+       cex = 0.8, inset = c(0.01, 0.01))
+
+# Task 4 - Theoretical
+nn$weights
+
+# Task 5 - Sample 500 points uniformly at random in the interval [0, 10], and
+# apply the sine function to each point. Use all these points as training
+# points for learning a NN that tries to predict x from sin(x).
+
+var <- runif(500, 0, 10)
+mydata <- data.frame(var, sin = sin(var))
+data <- mydata[1:500, ]
+
+nn <- neuralnet(var ~ ., mydata, hidden = 10, threshold = 0.1,
+                      startweights = winit, act.fct = "logistic")
+
+plot(data[, 2], data[, 1], cex = 2, xlab = "", ylab = "",
+     main = "Predict X from sin(X)")
+points(data[, 2], predict(nn, data), col = "green", cex = 0.8)
+legend("bottomright", c("train data", "predictions"),
+       col = c("black", "green"), pch = 1, box.lty = 0,
+       cex = 0.8, inset = c(0.01, 0.01))
