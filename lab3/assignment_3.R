@@ -4,7 +4,6 @@
 
 ########### Libraries #############
 library(neuralnet)
-library(dplyr)
 ########### Libraries #############
 
 
@@ -24,7 +23,7 @@ nn <- neuralnet(sin ~ ., tr, hidden = 10,
                 startweights = winit, act.fct = "logistic")
 
 # Plot of the training data (black), test data (blue), and predictions (red)
-plot(tr, cex = 2, xlab = "", ylab = "", main = "Neural network - Sine Function")
+plot(tr, cex = 2, xlab = "", ylab = "")
 points(te, col = "blue", cex = 0.8)
 points(te[, 1], predict(nn, te), col = "red", cex = 0.8)
 legend("bottomright", c("train data", "test data", "predictions"),
@@ -39,7 +38,7 @@ linear <- function(x) x
 nn.linear <- neuralnet(sin ~ ., tr, hidden = 10,
                 startweights = winit, act.fct = linear)
 
-plot(tr, cex = 2, xlab = "", ylab = "", main = "Linear activation function")
+plot(tr, cex = 2, xlab = "", ylab = "")
 points(te, col = "blue", cex = 0.8)
 points(te[, 1], predict(nn.linear, te), col = "green", cex = 0.8)
 legend("bottomright", c("train data", "test data", "predictions"),
@@ -51,7 +50,7 @@ ReLU <- function(x) ifelse(x > 0, x, 0)
 nn.relu <- neuralnet(sin ~ ., tr, hidden = 10,
                 startweights = winit, act.fct = ReLU)
 
-plot(tr, cex = 2, xlab = "", ylab = "", main = "ReLU activation function")
+plot(tr, cex = 2, xlab = "", ylab = "")
 points(te, col = "blue", cex = 0.8)
 points(te[, 1], predict(nn.relu, te), col = "green", cex = 0.8)
 legend("bottomright", c("train data", "test data", "predictions"),
@@ -63,7 +62,7 @@ softplus <- function(x) log(1 + exp(x))
 nn.softplus <- neuralnet(sin ~ ., tr, hidden = 10,
                 startweights = winit, act.fct = softplus)
 
-plot(tr, cex = 2, xlab = "", ylab = "", main = "Softplus activation function")
+plot(tr, cex = 2, xlab = "", ylab = "")
 points(te, col = "blue", cex = 0.8)
 points(te[, 1], predict(nn.softplus, te), col = "green", cex = 0.8)
 legend("bottomright", c("train data", "test data", "predictions"),
@@ -76,8 +75,7 @@ legend("bottomright", c("train data", "test data", "predictions"),
 var <- runif(500, 0, 50)
 mydata <- data.frame(var, sin = sin(var))
 
-plot(mydata, cex = 2, xlab = "", ylab = "", ylim = c(-10, 2),
-     main = "Neural Network on new data")
+plot(mydata, cex = 2, xlab = "", ylab = "", ylim = c(-10, 2))
 points(mydata[, 1], predict(nn, mydata[1]), col = "blue", cex = 0.8)
 legend("bottomleft", c("new sample data", "predictions"),
        col = c("black", "blue"), pch = 1, box.lty = 0,
@@ -97,8 +95,7 @@ data <- mydata[1:500, ]
 nn <- neuralnet(var ~ ., mydata, hidden = 10, threshold = 0.1,
                       startweights = winit, act.fct = "logistic")
 
-plot(data[, 2], data[, 1], cex = 2, xlab = "", ylab = "",
-     main = "Predict X from sin(X)")
+plot(data[, 2], data[, 1], cex = 2, xlab = "", ylab = "")
 points(data[, 2], predict(nn, data), col = "green", cex = 0.8)
 legend("bottomright", c("train data", "predictions"),
        col = c("black", "green"), pch = 1, box.lty = 0,

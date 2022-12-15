@@ -156,13 +156,6 @@ best_i <- apply(losses, MARGIN = 1, FUN = which.min)
 pred <- levels(test$y)[best_i]
 table(pred, test$y)
   
-# Alternative 2
-fit <- rpart(y ~ ., data=test, method="class",
-             parms=list(loss=matrix(c(0,1,5,0), byrow = TRUE, nrow=2)))
-
-predict_fit <- predict(fit, test, type = "class")
-cm_fit <- table(predict_fit ,test$y)
-
 ############### Task 6 #################
 
 ############### Task 6 #################

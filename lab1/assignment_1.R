@@ -6,7 +6,7 @@
 ###########
 
 # Read data
-data <- read.csv("data/optdigits.csv")
+data <- read.csv("data/optdigits.csv", header = FALSE)
 
 # Splitting dataset into train(50%), validation(25%) and test data(25%).
 # set.seed is used to ensure the same results every time

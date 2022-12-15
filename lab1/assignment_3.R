@@ -117,3 +117,4 @@ ggplot(data, aes(x = age, y = pgc, color = as.factor(prediction_basis))) +
   labs(x = "Age", y = "Plasma Glucose Concentration",
        color = "Predicted Diabetes") +
   scale_color_manual(values = c("black", "deepskyblue2"))
+
