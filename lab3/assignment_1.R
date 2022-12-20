@@ -17,14 +17,14 @@ st <- merge(stations, temps, by = "station_number")
 
 # Smoothing coefficients
 h.distance <- 100000
-h.date <- 20
+h.date <- 30
 h.time <- 6
 
 # The point to predict
-a <- 58.4274  # longitude
-b <- 14.8263  # latitude
+a <- 58.4274  # latitude
+b <- 14.8263  # longitude
 
-p.date <- "2023-11-04" # The date to predict
+p.date <- "2018-01-05" # The date to predict
 
 times <- c("04:00:00", "06:00:00", "08:00:00", "10:00:00",
            "12:00:00", "14:00:00", "16:00:00", "18:00:00",
@@ -69,12 +69,12 @@ for (i in seq_along(times)) {
 }
 
 # Plot of both kernel models
-plot(temp.ksum, type = "b", pch = 5,
+plot(temp.ksum, type = "b", pch = 5, main = "Predicted temperatures",
      ylim = c(min(temp.ksum[which.min(temp.ksum)],
                   temp.kprod[which.min(temp.kprod)]),
      max(temp.ksum[which.max(temp.ksum)],
                      temp.kprod[which.max(temp.kprod)])),
-     xaxt = "n", main = "Predicted Temperatures", xlab = "Time of day",
+     xaxt = "n", xlab = "Time of day",
      ylab = "Temperature", col = "blue")
 
 points(temp.kprod, type = "b", pch = 5, xaxt = "n", col = "red")
