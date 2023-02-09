@@ -12,7 +12,7 @@ TDDE01 is a Machine Learning course taught at Linköping University, Sweden. Att
 
 [Assignment 3](https://github.com/jakeberggren/TDDE01-Machine-Learning/blob/main/lab1/assignment_3.R) implements Logistic regression to predict diabetes. The results are compared to using basis function expansion.
 
----
+#
 
 ## [Lab 2](https://github.com/jakeberggren/TDDE01-Machine-Learning/tree/main/lab2) - LASSO Regression, Decision trees, PCA
 
@@ -22,7 +22,7 @@ TDDE01 is a Machine Learning course taught at Linköping University, Sweden. Att
 
 [Assignment 3](https://github.com/jakeberggren/TDDE01-Machine-Learning/blob/main/lab2/assignment_3.R) implements a Principcal Component Analysis to research correlations of violent crimes and a number of features such as economic situation etc.
 
----
+#
 
 ## [Lab 3](https://github.com/jakeberggren/TDDE01-Machine-Learning/tree/main/lab3) - Kernel Methods, Support Vector Machines, Neural Networks
 
