@@ -1,4 +1,4 @@
-# Assignment 1 of Lab 2 of course TDDE01,
+# Assignment 2, Lab 2 in course TDDE01,
 # Machine Learning at Linkoping University, Sweden
 
 ########### Libraries #############
@@ -16,12 +16,12 @@ library(rpart.plot)
 ############### Task 1 #################
 
 # Read data
-data <- read.csv("data/bank-full.csv", sep = ";", stringsAsFactors = TRUE)
+data <- read.csv2("data/bank-full.csv", stringsAsFactors = TRUE)
 
-# Remove duration column
+# Remove "duration" variable
 data <- data %>% select(-duration)
 
-# data partition
+# Data partitioning
 n <- dim(data)[1]
 set.seed(12345)
 id <- sample(1:n, floor(n * 0.4))
@@ -34,6 +34,9 @@ valid <- data[id2, ]
 
 id3 <- setdiff(id1, id2)
 test <- data[id3, ]
+
+# clean up environment
+rm(id, id1, id2, n)
 
 ############### Task 2 #################
 # Fit decision trees to the training data so that you can change default
@@ -105,11 +108,19 @@ opt_valid <- which.min(valid_score[-1])
 data.frame(train = opt_train + 1,
            valid = opt_valid + 1)
 
-opt_tree <- prune.tree(tree_c, best = 22) # vad är bästa träddjupet?
+# Opitmal tree
+opt_tree <- prune.tree(tree_c, best = opt_valid)
 
 # visualization of tree structure with optimal number of leaves
 plot(opt_tree)
 opt_tree
+
+# Bias variance trade off: 
+# Bias is the models ability to capture the true relationship. So a high bias
+# means that the model will underfit. However as bias gets lower, the model
+# varience gets higher. This means that the model will be very sensitive to
+# change and thus not have as good predictive properties. So a model with high
+# varience is overfitted to the data.
 
 ############### Task 4 #################
 # Estimate the confusion matrix, accuracy and F1 score for the test data by
@@ -118,28 +129,30 @@ opt_tree
 # be preferred here.
 ############### Task 4 #################
 
-# Prediction on test data using the optimal tree
-pred_test <- predict(opt_tree, newdata = test, type = "class")
+# prediction on test data with optimal model
+pred.opt <- predict(opt.tree, newdata = test, type = "class")
 
-# Confusion matrix
-confusion_matrix <- table(pred_test, test$y)
-conf_matrix <- confusionMatrix(pred_test, test$y) # Don't need this
+# confusion matrix of optimal model
+cm <- table(pred.opt, test$y)
 
-# Using MLmetrics to estimate accuracy and F1 score.
-# This is wrong
-Accuracy(pred_test, test$y) # 0.891035, accuracy for no
-F1_Score(pred_test, test$y, positive = NULL) # 0.9414004
+# computing accuracy and F1 score:
+tp <- cm[4]
+tn <- cm[1]
+fp <- cm[2]
+p <- cm[3] + cm[4]
+n <- cm[1] + cm[2]
+rec <- (tp / p)
+prec <- (tp / (tp + fp))
 
-# Manual estimations of accuracy and F1 score
-# Recalculate this and get it correct.
-tp <- confusion_matrix[4]
-fp <- confusion_matrix[2]
-fn <- confusion_matrix[3]
-p <- confusion_matrix[4] + confusion_matrix[3]
-n <- confusion_matrix[1] + confusion_matrix[2] 
+rbind(
+  acc = ((tp + tn) / (p + n)),
+  f1 = ((2 * prec * rec) / (prec + rec))
+)
 
-accuracy <- (tp + fp) / (p + n) # 0.023665, accuracy for yes
-f1 <- 2 * tp / (2 * tp + fp + fn) # 0.224554, f1 score for yes
+# judging from the accuracy and the F1 score, the model has poor predictive power.
+# The accuracy is high due to many correct "no" classifications. However, we
+# should prefer F1 score here since the classes are very imbalanced. The F1 score
+# is low which indicates a model with poor predictive power.
   
 ############### Task 5 #################
 # Perform a decision tree classification of the test data with the following
@@ -150,74 +163,83 @@ f1 <- 2 * tp / (2 * tp + fp + fn) # 0.224554, f1 score for yes
 # the results from step 4 and discuss how the rates has changed and why.
 ############### Task 5 #################
 
-# Prediciton on testdata
-prob <- predict(opt_tree, newdata = test)
-# Compute losses with loss matrix
-losses <- prob%*%matrix(c(0,1,5,0), byrow = TRUE, nrow=2)
-best_i <- apply(losses, MARGIN = 1, FUN = which.min)
-pred <- levels(test$y)[best_i]
-table(pred, test$y)
+# Decision tree classification with Loss matrix:
+loss.matrix <- matrix(c(0,1,5,0), byrow = TRUE, nrow = 2)
 
-# here F1 and accuracy needs to be calculated again.
+prob <- predict(opt.tree, newdata = test)
+losses <- prob %*% loss.matrix
+best.i <- apply(losses, MARGIN = 1, FUN = which.min)
+pred <- levels(test$y)[best.i]
+cm2 <- table(pred, test$y)
+cm2
+
+# computing acc and f1 to compare:
+tp <- cm2[4]
+tn <- cm2[1]
+fp <- cm2[2]
+p <- cm2[3] + cm2[4]
+n <- cm2[1] + cm2[2]
+rec <- (tp / p)
+prec <- (tp / (tp + fp))
+
+rbind(
+  acc = ((tp + tn) / (p + n)),
+  f1 = ((2 * prec * rec) / (prec + rec))
+)
+
+# The model now punishes false negatives more and thus it has become more balanced.
+# We can see that the accuracy decreased but the F1 score has increased. So since
+# we prefer F1 score due to imbalanced classes this model performs better and has
+# better predictive power compared to the previous model.
 
 ############### Task 6 #################
+# Compute TPR and FPR values and plot corresponding ROC curves. Make conclusions.
+# Why would a precision recall curve be a better option in this case?
 ############### Task 6 #################
 
+prob.tree <- predict(opt.tree, newdata = test, type = "vector")
 
-# Redo this code and make it work.
-logistic_model = glm(y ~ ., data = test, family = "binomial")
-logistic_fit = predict(logistic_model, type = "response")
-pred_test = predict(tree_c_pruned, newdata = test)
-pi = seq(0.05, 0.95, 0.05)
-tpr_log = rep(0, length(pi))
-fpr_log = rep(0, length(pi))
-14
-tpr_vec = rep(0, length(pi))
-fpr_vec = rep(0, length(pi))
-for (index in 1:length(pi))
-{
-  pred_loss_tree = ifelse(pred_test[, 2] > pi[index], "yes", "no")
-  pred_loss_matrix = table(test$y, pred_loss_tree)
-  pred_log_tree = ifelse(logistic_fit > pi[index], "yes", "no")
-  pred_log_matrix = table(test$y, pred_log_tree)
-  if (ncol(pred_loss_matrix) > 1)
-  {
-    tpr_vec[index] = pred_loss_matrix[1, 1] / (pred_loss_matrix[1, 1] + pred_loss_matrix[1, 2])
-    fpr_vec[index] = pred_loss_matrix[2, 1] / (pred_loss_matrix[2, 1] + pred_loss_matrix[2, 2])
-  }
-  else {
-    tpr_vec[index] = NA
-    fpr_vec[index] = NA
-  }
-  if (ncol(pred_log_matrix) > 1)
-  {
-    tpr_log[index] = pred_log_matrix[1, 1] / (pred_log_matrix[1, 1] + pred_log_matrix[1, 2])
-    fpr_log[index] = pred_log_matrix[2, 1] / (pred_log_matrix[2, 1] + pred_log_matrix[2, 2])
-  }
-  else {
-    tpr_log[index] = NA
-    fpr_log[index] = NA
-  }
+# Computing ROC curves for FPR and TPR for the optimal tree:
+tpr <- numeric()
+fpr <- numeric()
+
+for (i in seq(from = 0.05, to = 0.95, by = 0.05)) {
+  decision <- ifelse(prob.tree[, 2] > i, "yes", "no")
+  cm.temp <- table(decision, test$y)
+  
+  true.pos <- cm.temp[4]
+  false.pos <- cm.temp[2]
+  pos <- cm.temp[3] + cm.temp[4]
+  neg <- cm.temp[1] + cm.temp[2]
+  tpr <- c(tpr, true.pos / pos) 
+  fpr <- c(fpr, false.pos / neg)
 }
-plot(c(0, fpr_vec, 1), c(0, tpr_vec, 1), xlim = c(0,1), ylim = c(0,1), type = "b", xlab = "FPR",
-     ylab = "TPR", pch = 5)
-lines(c(0, fpr_log, 1), c(0, tpr_log, 1), type = "b", col = "blue", pch = 5)
-legend("bottomright", c("ROC Tree", "ROC Logistic regression"), col = c("black","blue"), pch =
-         5)
 
+plot(fpr, tpr, pch = 5, type = "b")
 
- 
+# regression model
+reg.model <- glm(y ~ ., data = train, family = "binomial")
+prob.log <- predict(reg.model, newdata = test, type = "response")
 
+# Computing ROC curves for FPR and TPR for the regression model:
+tpr <- numeric()
+fpr <- numeric()
 
+for (i in seq(from = 0.05, to = 0.95, by = 0.05)) {
+  decision <- ifelse(prob.log > i, "yes", "no")
+  cm.temp <- table(decision, test$y)
+  
+  true.pos <- cm.temp[4]
+  false.pos <- cm.temp[2]
+  pos <- cm.temp[3] + cm.temp[4]
+  neg <- cm.temp[1] + cm.temp[2]
+  tpr <- c(tpr, true.pos / pos)
+  fpr <- c(fpr, false.pos / neg)
+}
 
+points(fpr, tpr, pch = 5, type = "b", col = "blue")
 
-
-
-
-
-
-
-
-
-
-
+# The plot shows that the tree model is slightly better since it has a greater
+# area under the curve (However they are very similar). Once again since the
+# classes are imbalanced, a better choice in this case would be to look at
+# the precision recall curves instead.

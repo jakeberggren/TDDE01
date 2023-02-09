@@ -1,4 +1,4 @@
-# Assignment 1 of Lab 2 of course TDDE01,
+# Assignment 1, Lab 2 in course TDDE01,
 # Machine Learning at Linkoping University, Sweden
 
 ########### Libraries #############
