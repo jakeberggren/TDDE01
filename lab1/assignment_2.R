@@ -37,7 +37,6 @@ summary(model_test)
 
 pred_train <- predict(model_train)
 pred_test <- predict(model_test)
-
 mse_train <- mean((train_scaled$motor_UPDRS - pred_train)^2)
 mse_test <- mean((test_scaled$motor_UPDRS - pred_test)^2)
 

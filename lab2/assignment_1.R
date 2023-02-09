@@ -6,16 +6,18 @@ library(dplyr)
 library(ggplot2)
 library(glmnet)
 library(caret)
+
+
 ########## Read and divide data ########
 data <- read.csv("data/tecator.csv")
 
 # Divide into test and train data
-
 n <- dim(data)[1]
 set.seed(12345)
 id <- sample(1:n, floor(n * 0.5))
 train <- data[id, ]
 test <- data[-id, ]
+
 
 ############### Task 1 #################
 # model "fat" as a linear regression with channels as features. Report
@@ -73,7 +75,7 @@ plot(ridge, xvar = "lambda", label = TRUE)
 # Using cross validation 
 cv <- cv.glmnet(x, y, alpha = 1, family = "gaussian")
 plot(cv)
-lambda_opt <- cv$lambda.min # 0.004561105
+lambda_opt <- cv$lambda.min # 0.05744535
 coef(cv, s = "lambda.min")
 summary(cv)
 cv_pred <- predict(cv, newx = x, s = lambda_opt)
@@ -82,10 +84,4 @@ plot(test$Fat, col = "blue", ylim = c(0, 60), ylab = "Fat levels",
      main = "Original test vs model with optimal lamdbda")
 points(cv_pred, col = "green")
 legend("topright", c("actuals", "predicted using cross validation"),
-       fill = c("blue", "green"))
-
-# Still needs to be done
-# finally,
-# create a scatter plot of the original test versus predicted test values for
-# the model corresponding to the optimal lambda and comment on whether the model
-# predictions are good.
+       col = c("blue", "green"), pch = 1, cex = 0.8)

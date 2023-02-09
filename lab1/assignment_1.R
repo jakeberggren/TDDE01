@@ -115,7 +115,7 @@ for (x in 1:30) {
   for (y in 0:9) {
     prob_cross_entropy <- model_valid_temp$prob[which(data_valid$V65 == y), y+1]
     prob_cross_entropy <- sum(sapply(prob_cross_entropy, LogProb))
-    cross_entropy[x] <- cross_entropy[x] +  prob_cross_entropy 
+    cross_entropy[x] <- cross_entropy[x] + prob_cross_entropy 
   }
 }
 
