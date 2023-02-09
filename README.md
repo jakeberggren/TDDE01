@@ -16,7 +16,7 @@ TDDE01 is a Machine Learning course taught at Linköping University, Sweden. Att
 
 ### [Lab 2](https://github.com/jakeberggren/TDDE01-Machine-Learning/tree/main/lab2) - LASSO Regression, Decision trees, PCA
 
-[Assignment 1](https://github.com/jakeberggren/TDDE01-Machine-Learning/blob/main/lab2/assignment_1.R) Uses LASSO Regression to investigate whether a near infrared absorbance spectrum can be used to predict fat content in samples of meat.
+[Assignment 1](https://github.com/jakeberggren/TDDE01-Machine-Learning/blob/main/lab2/assignment_1.R) uses LASSO Regression to investigate whether a near infrared absorbance spectrum can be used to predict fat content in samples of meat.
 
 [Assignment 2](https://github.com/jakeberggren/TDDE01-Machine-Learning/blob/main/lab2/assignment_2.R) implements Decision trees to determine the success of a bank marketing campaign.
 
