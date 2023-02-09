@@ -4,7 +4,7 @@ TDDE01 is a Machine Learning course taught at Linköping University, Sweden. Att
 
 ---
 
-## [Lab 1](https://github.com/jakeberggren/TDDE01-Machine-Learning/tree/main/lab1) - k-NN, Regression, Basis Function Expansion
+### [Lab 1](https://github.com/jakeberggren/TDDE01-Machine-Learning/tree/main/lab1) - k-NN, Regression, Basis Function Expansion
 
 [Assignment 1](https://github.com/jakeberggren/TDDE01-Machine-Learning/blob/main/lab1/assignment_1.R) implements a K-nearest neighbors algorithm to predict handwritten digits ranging from 0-9.
 
@@ -14,7 +14,7 @@ TDDE01 is a Machine Learning course taught at Linköping University, Sweden. Att
 
 #
 
-## [Lab 2](https://github.com/jakeberggren/TDDE01-Machine-Learning/tree/main/lab2) - LASSO Regression, Decision trees, PCA
+### [Lab 2](https://github.com/jakeberggren/TDDE01-Machine-Learning/tree/main/lab2) - LASSO Regression, Decision trees, PCA
 
 [Assignment 1](https://github.com/jakeberggren/TDDE01-Machine-Learning/blob/main/lab2/assignment_1.R) Uses LASSO Regression to investigate whether a near infrared absorbance spectrum can be used to predict fat content in samples of meat.
 
@@ -24,7 +24,7 @@ TDDE01 is a Machine Learning course taught at Linköping University, Sweden. Att
 
 #
 
-## [Lab 3](https://github.com/jakeberggren/TDDE01-Machine-Learning/tree/main/lab3) - Kernel Methods, Support Vector Machines, Neural Networks
+### [Lab 3](https://github.com/jakeberggren/TDDE01-Machine-Learning/tree/main/lab3) - Kernel Methods, Support Vector Machines, Neural Networks
 
 [Assignment 1](https://github.com/jakeberggren/TDDE01-Machine-Learning/blob/main/lab3/assignment_1.R) uses kernel methods to predict hourly temperatures for a date and place in Sweden. Data provided by the Swedish Meteorological and Hydrological Institute (SMHI).
 
